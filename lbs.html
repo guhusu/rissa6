@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+$(document).ready(function () {
+    $('li a').on('click',function(e){
+        var re=$(e.target).attr('re');
+        if(re!=undefined){
+            //window.sessionStorage["audio_id"]=re;
+            if(!sessionStorage){
+                alert('no support sessionStorage');
+            }else{
+            	var tmp=re.split('-|-');
+                sessionStorage.setItem("lbs_addr", tmp[1]);
+                sessionStorage.setItem("lbs_tel", tmp[0]);
+                sessionStorage.setItem("lbs_lat", tmp[2]);
+                sessionStorage.setItem("lbs_lng", tmp[3]);
+                sessionStorage.setItem("lbs_title", tmp[4]);
+            }
+        }
+    });
+ });
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<div data-role="page" id="lbs" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           LBS
+        </h3>
+    </div>
+    <div data-role="content"><ul data-role="listview" data-divider-theme="c" data-inset="true"></ul></div>
+</div>
+
+</body>
+</html>

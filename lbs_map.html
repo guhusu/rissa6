@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript"src="http://maps.google.com/maps/api/js?sensor=true" ></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+var map,infowindow=null,site_data={title:sessionStorage.getItem("lbs_title"),pict:"",tel:sessionStorage.getItem("lbs_tel"),addr:sessionStorage.getItem("lbs_addr"),lat:sessionStorage.getItem("lbs_lat"),lng:sessionStorage.getItem("lbs_lng"),header:""},viewport={width:$(window).width(),height:$(window).height()},watchID=null,myTG=[],directionsDisplay,directionsService=new google.maps.DirectionsService,MyMarker;document.addEventListener("deviceready",onDeviceReady,!1);
+$(document).ready(function(){$("#vt").html(site_data.title);var a=$("#vh").outerHeight(!0)+$("#vb").outerHeight(!0),a=viewport.height-a;$("#map").css({height:a+"px",width:viewport.width+"px"});initialize()});
+function initialize(){var a={zoom:16,center:new google.maps.LatLng(site_data.lat,site_data.lng),mapTypeId:google.maps.MapTypeId.ROADMAP};map=new google.maps.Map(document.getElementById("map"),a);infowindow=new google.maps.InfoWindow({content:"loading..."});setmarks();directionsDisplay=new google.maps.DirectionsRenderer;directionsDisplay.setMap(map)}
+function setmarks(){var a=new google.maps.LatLng(site_data.lat,site_data.lng),a=new google.maps.Marker({position:a,map:map,icon:"images/location.png",title:site_data.title,html:"\u96fb\u8a71: "+site_data.tel+"<br>\u5730\u5740: "+site_data.addr});a.setAnimation(google.maps.Animation.DROP);google.maps.event.addListener(a,"mouseover",function(){infowindow.setContent(this.html);infowindow.open(map,this)})}
+function setmymarks(){var a=new google.maps.LatLng(myTG[0],myTG[1]);MyMarker&&MyMarker.setMap(null);MyMarker=new google.maps.Marker({position:a,map:map,icon:"images/mylocation.png"})}function mylocation(){void 0==myTG[0]?alert("\u7121\u6cd5\u53d6\u5f97\u60a8\u7684\u4f4d\u7f6e,\u8acb\u78ba\u5b9a\u6709\u958b\u555fGPS\u6216\u7db2\u8def"):map.setCenter(new google.maps.LatLng(myTG[0],myTG[1]))}
+function calcRoute(){if(void 0==myTG[0])return alert("\u7121\u6cd5\u53d6\u5f97\u60a8\u7684\u4f4d\u7f6e,\u8acb\u78ba\u5b9a\u6709\u958b\u555fGPS\u548c\u7db2\u8def"),!1;var a=new google.maps.LatLng(myTG[0],myTG[1]);directionsService.route({origin:a,destination:site_data.addr,optimizeWaypoints:!0,travelMode:google.maps.TravelMode.DRIVING},function(a,b){b==google.maps.DirectionsStatus.OK&&directionsDisplay.setDirections(a)})}
+function onDeviceReady(){"none"==navigator.connection.type.toLowerCase()&&alert("\u8acb\u958b\u555f\u7db2\u8def!!");watchID=navigator.geolocation.watchPosition(onSuccess,onError,{timeout:3E4})}function onSuccess(a){myTG=[a.coords.latitude,a.coords.longitude];setmymarks()}function onError(a){};
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<div data-role="page" id="lbs_map" >
+	<div data-theme="c" data-role="header" id="vh" >
+    <a data-role="button" href="lbs.html" data-icon="back"  data-iconpos="left"
+        class="ui-btn-left" data-rel="back">
+            返回
+        </a>
+        <h3 id="vt"></h3>
+    </div>
+    <div data-role="content" style="padding:0px;"><div id="map"></div></div>
+	<div data-role="footer" id="vb" data-theme="c">	
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#" onclick="calcRoute()">路線圖</a></li>
+        <li><a href="#" onclick="mylocation()">我的位置</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

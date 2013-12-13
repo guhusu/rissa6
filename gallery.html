@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<link rel="stylesheet" href="skin/photoswipe/photoswipe.css" /> 
+<script type="text/javascript" src="js/photoswipe/klass.min.js"></script>
+<script src="js/photoswipe/code.photoswipe-3.0.4.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+(function(window, PhotoSwipe){
+        
+            document.addEventListener('DOMContentLoaded', function(){
+            
+                var
+                    options = {},
+                    instance = PhotoSwipe.attach( window.document.querySelectorAll('#Gallery a'), options );
+            
+            }, false);
+            
+            
+        }(window, window.Code.PhotoSwipe));
+
+$(document).ready(function () {
+    var w=$(window).width();
+    var h=w;
+    if(w<200){
+        $('.gallery li').css('width','100%');
+        
+    }
+    if(w>200 && w<400){
+        $('.gallery li').css('width','50%');
+        h *=0.5;
+    }
+    if(w>400 && w<600){
+        $('.gallery li').css('width','33.33333%');
+        h *=0.33333;
+    }
+    if(w>600 && w<800){
+        $('.gallery li').css('width','25%');
+        h *=0.25;
+    }
+    if(w>=800){
+        $('.gallery li').css('width','20%');
+        h *=0.20;
+    }
+    $('.gallery li img').css('height',h+'px');
+});
+</script>
+<style>
+
+.gallery { list-style: none; padding: 0; margin: 0; overflow-y:hidden;}
+.gallery:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+.gallery li { float: left; width: 33.33333333%; }
+.gallery li a { display: block; margin: 5px; border: 1px solid #3c3c3c; }
+.gallery li img { display: block; width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div data-role="page" id="gallery" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           精選相片
+        </h3>
+    </div>
+    <div data-role="content"><ul id="Gallery" class="gallery" ><li><a href="images/gallery/78.jpg" alt="妞妞"><img src="images/gallery/78.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/77.jpg" alt="妞妞"><img src="images/gallery/77.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/76.jpg" alt="妞妞"><img src="images/gallery/76.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/75.jpg" alt="妞妞"><img src="images/gallery/75.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/74.jpg" alt="妞妞"><img src="images/gallery/74.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/73.jpg" alt="妞妞"><img src="images/gallery/73.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/72.jpg" alt="妞妞"><img src="images/gallery/72.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/71.jpg" alt="妞妞"><img src="images/gallery/71.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/70.jpg" alt="妞妞"><img src="images/gallery/70.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/69.jpg" alt="妞妞"><img src="images/gallery/69.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/68.jpg" alt="妞妞"><img src="images/gallery/68.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/67.jpg" alt="妞妞"><img src="images/gallery/67.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/66.jpg" alt="妞妞"><img src="images/gallery/66.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/65.jpg" alt="妞妞"><img src="images/gallery/65.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/64.jpg" alt="妞妞"><img src="images/gallery/64.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/63.jpg" alt="妞妞"><img src="images/gallery/63.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/62.jpg" alt="妞妞"><img src="images/gallery/62.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/61.jpg" alt="妞妞"><img src="images/gallery/61.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/60.jpg" alt="妞妞"><img src="images/gallery/60.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/59.jpg" alt="妞妞"><img src="images/gallery/59.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/58.jpg" alt="妞妞"><img src="images/gallery/58.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/57.jpg" alt="妞妞"><img src="images/gallery/57.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/56.png" alt="妞妞"><img src="images/gallery/56.png" alt="妞妞" /></a></li><li><a href="images/gallery/55.jpg" alt="妞妞"><img src="images/gallery/55.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/54.jpg" alt="妞妞"><img src="images/gallery/54.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/53.jpg" alt="妞妞"><img src="images/gallery/53.jpg" alt="妞妞" /></a></li></ul></div>
+</div>
+
+</body>
+</html>

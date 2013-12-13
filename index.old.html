@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  
+});
+
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+$(document).ready(function(){$("#pushmsga").click(function(){$.mobile.changePage("#pushmsg",{transition:"slide"})})});
+$(document).on("pagebeforeshow","#main",function(c,d){var b=document.documentElement.clientWidth,a=document.documentElement.clientHeight;document.getElementById("main").width=b;document.getElementById("main").height=a;document.getElementById("maindiv")&&(document.getElementById("mainbutton")&&(sh=0.8*a,document.getElementById("maindiv").style.paddingTop=sh+"px",a>sh&&(a-=sh)),document.getElementById("maindiv").style.width=b+"px",document.getElementById("maindiv").style.height=a+"px")});
+$(document).on("pageshow","#main",function(){void 0!=window.sessionStorage.main&&"yes"==window.sessionStorage.main&&$.mobile.changePage("#page1",{transition:"none"})});$(document).on("pagehide","#main",function(){window.sessionStorage.main="yes";});
+$(document).on("pageshow","#page1",function(c,d){""!=localStorage.pushmsg_data&&($("#pushmsga").css("display",""),$("#pushmsgcount").html(localStorage.not_read_count));0>=localStorage.not_read_count&&$("#pushmsgcount").css("display","none")});
+$(document).on("pageshow","#pushmsg",function(c,d){localStorage.not_read_count=0;void 0==$("#pushmsg").data("foo")&&($("#pushmsgcc").html(localStorage.pushmsg_data),document.getElementById("pushmsgul")||$("#pushmsgcc").html('<ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul"></ul>'),$("#pushmsg [data-role=listview]").listview(),""!=localStorage.pushmsg_tmp&&($("#pushmsgul").prepend(localStorage.pushmsg_tmp),$("#pushmsgul").listview("refresh"),localStorage.pushmsg_data=
+$("#pushmsgcc").html(),localStorage.pushmsg_tmp=""),$("#pushmsg").data("foo","yes"));""!=localStorage.pushmsg_tmp&&($("#pushmsgul").prepend(localStorage.pushmsg_tmp),$("#pushmsgul").listview("refresh"),localStorage.pushmsg_data=$("#pushmsgcc").html(),localStorage.pushmsg_tmp="");if(3<$("#pushmsgul > li").length){var a="",b=1;$("#pushmsgul > li").each(function(){3>=b&&(a+='<li class="ui-li ui-li-static ui-btn-up-c ui-first-child">'+$(this).html()+"</li>");b++});a='<ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul">'+
+a+"</ul>";localStorage.pushmsg_data=a}});
+</script>
+<style>
+.ui-page.ui-body-c.ui-page-active {
+background: url(images/bg.jpg) no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.cvt {
+margin:0px;
+padding:70% 0px 0px 0px;
+text-align:center;
+}
+.cs {
+float:left;width:20%;margin:0px;text-align:center;padding-bottom:20px;
+}
+.vbtn {
+	display:inline-block;
+	width:83px;
+	height:83px;
+	line-height:30px;
+	text-align:center;
+	margin-top:0.1em;
+	color:#fff;
+	/*text-shadow:1px 1px 1px #333;*/
+	/*padding-top:29px;*/
+}
+.ctv {
+margin:0px;
+padding:2% 0px 0px 0px;
+text-align:center;
+}
+.mainbtn {position:absolute;top:0px;left:0px;z-index:2;padding:0px;margin:0px;text-align:center;}
+.msgtipb {position:absolute;top:-8px;left:20px;background:#ed1d24;color:#fff;padding:2px;border-radius:0px;}
+.chat {position:absolute;top:10px;right:24px;width:24px;height:19px;background:url('images/chat.png');}
+<!-- css_start -->
+.uitest {}.ui-icon-about_us{background-image:url(images/about_us.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
+.ui-icon-gallery{background-image:url(images/gallery.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
+.ui-icon-video{background-image:url(images/video.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
+.ui-icon-contact_us{background-image:url(images/contact_us.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
+.ui-icon-alink{background-image:url(images/alink.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
+<!-- css_end -->
+</style>
+</head>
+<body><!-- main_start --><!-- main_end -->
+<div data-role="page" id="page1" >
+	<div  data-role="header" style="color:#fff;background:transparent;border:#fff solid 0px;">
+        <h3 style="text-align:center;padding:0px;color:#fff;margin:.6em;">
+           SUPER 7 - 妞妞<script>localStorage["appname"]="SUPER 7 - 妞妞";</script>
+        </h3>
+        <!-- pushmsg_start --><span id="pushmsga" class="chat"><span class="ui-btn-corner-all msgtipb" id="pushmsgcount">5</span></span><!-- pushmsg_end -->
+    </div>
+    <div  data-role="content" id="ctv" class="ctv">
+    <div style="text-align:center;"><!-- logo_start --><img src="images/logo.png" width="60%"/><!-- logo_end --></div>
+<!-- item_start --><!-- item_end -->		
+    	<div style="clear:both;"></div>
+    </div>
+<!-- bitem_start --><div data-theme="b" data-role="footer" data-position="fixed"><div data-role="navbar"><ul><!-- about_us_menustart --><li><a href="main.html" data-iconpos="top" data-icon="about_us" rel="external"><span id="about_us_title">關於妞妞</span></a></li><!-- about_us_menuend --><!-- gallery_menustart --><li><a href="gallery.html" data-iconpos="top" data-icon="gallery" rel="external"><span id="gallery_title">精選相片</span></a></li><!-- gallery_menuend --><!-- video_menustart --><li><a href="video.html" data-iconpos="top" data-icon="video" rel="external"><span id="video_title">精選影音</span></a></li><!-- video_menuend --><!-- contact_us_menustart --><li><a href="contact_us.html" data-iconpos="top" data-icon="contact_us" rel="external"><span id="contact_us_title">妞妞臉書</span></a></li><!-- contact_us_menuend --><!-- alink_menustart --><li><a href="alink.html" data-iconpos="top" data-icon="alink" rel="external"><span id="alink_title">推薦連結</span></a></li><!-- alink_menuend --></ul></div></div><!-- bitem_end -->
+</div>
+<div data-role="page" id="pushmsg" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="#page1" data-icon="back"  data-iconpos="left"
+        class="ui-btn-left" data-transition="slide" data-direction="reverse">
+            返回
+        </a>
+        <h3>
+           訊息通知
+        </h3>
+    </div>
+    <div data-role="content" id="pushmsgcc" >
+    <ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul">
+    </ul>
+    </div>
+</div>
+</body>
+</html>

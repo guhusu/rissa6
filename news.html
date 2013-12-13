@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+var Rrestclient={_url:"",get:function(a){$.ajax({type:"GET",url:this._url,contentType:"application/json",success:a,error:function(a,c,b){},timeout:6E4})}};
+$(document).ready(function(){if("undefined"!=typeof html5)return!1;var c=!0,b=localStorage.getItem("rain_news_time"),e=localStorage.getItem("rain_news_cktime");if("undefined"==typeof b||null==b)b=$("#ptime").html();var d=Math.floor($.now()/1E3);d>e+3600&&(Rrestclient._url="http://www.app4u.twrestapi/news_all/60",Rrestclient.get(function(a){localStorage.setItem("rain_news_cktime",d);b!=a.time&&(localStorage.setItem("rain_news_time",a.time),localStorage.setItem("rain_news_com",a.com),localStorage.setItem("rain_news_other",
+		a.other),$("#news_listview").html(a.com),$("#news_listview").listview("refresh"),$("[data-role=page]").each(function(){"news"!=this.id&&$("#"+this.id).remove()}),$("body").append(a.other),c=!1)}));c&&($("#news_listview").html(localStorage.getItem("rain_news_com")),$("#news_listview").listview("refresh"),$("body").append(localStorage.getItem("rain_news_other")))});
+
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<span style="display:none;" id="ptime"></span>
+<div data-role="page" id="news" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           最新消息
+        </h3>
+    </div>
+    <div data-role="content"><ul data-role="listview" data-divider-theme="c" data-inset="true"></ul></div>
+</div>
+
+</body>
+</html>

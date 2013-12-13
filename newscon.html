@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+var cid="60",Rrestclient={_url:"",get:function(a){$.ajax({type:"GET",url:this._url,contentType:"application/json",success:a,error:function(a,e,c){alert(c)},timeout:6E4})},getTime:function(a,b){$.ajax({type:"GET",url:a,contentType:"application/x-www-form-urlencoded",success:b,error:function(a,b,d){alert(d)},timeout:6E4})}};
+$(document).on("pagebeforeshow","#newscon",function(a,b){void 0==b.prevPage.attr("id")&&void 0!=localStorage.newscon_com&&($("#newsconda").html(localStorage.newscon_com),$("[data-role=page]").each(function(){"newscon"!=this.id&&$("#"+this.id).remove()}),$("body").append(localStorage.newscon_other),$("#newscon [data-role=listview]").listview())});
+$(document).on("pageshow","#newscon",function(){if(void 0==localStorage.newscon_time||""==localStorage.newscon_time)localStorage.newscon_time=0;Rrestclient.getTime("http://www.app4u.tw/restapi/newscon_time/"+cid,function(a){localStorage.newscon_time<parseInt(a)&&(localStorage.newscon_time=a,get_newscon())})});
+function get_newscon(){Rrestclient._url="http://www.app4u.tw/restapi/newscon/"+cid;Rrestclient.get(function(a){void 0!=a.com&&($("#newscon div:jqmData(role=content)").html(a.com),$("[data-role=page]").each(function(){"newscon"!=this.id&&$("#"+this.id).remove()}),$("body").append(a.other),$("#newscon [data-role=listview]").listview(),localStorage.newscon_com=a.com,localStorage.newscon_other=a.other)})};
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<span style="display:none;" id="ptime">123456</span>
+<div data-role="page" id="newscon" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           最新消息2
+        </h3>
+    </div>
+    <div data-role="content"><ul data-role="listview" data-divider-theme="c" data-inset="true"></ul></div>
+</div>
+
+</body>
+</html>

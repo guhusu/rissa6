@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0">
+<title>RMC</title>
+<link href="rmccss/rmc2.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/jquery.touchswipe.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/iscroll.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/rmc2.js"></script>
+<style>
+.main_header {
+	color:#333;
+	background:#fff;
+}
+.bbgg2 {
+background: url(images/bg.png);  
+-webkit-background-size: cover;
+background-size: cover;
+}
+.bbgg {
+	background: url(images/bg.png);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.bg1 {
+	background: url(images/home/001.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.bg2 {
+	background: url(images/home/002.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.bg3 {
+	background: url(images/home/003.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.main_menu {
+	position:absolute;
+	left:0px;
+	bottom:30px;
+	background:rgba(255,255,255,0.8);
+	/*opacity:0.7;*/
+	width:100%;
+	height:50px;
+	box-shadow:0px 0px 5px #f1da36;
+}
+/*.main_menu:before {
+	background:url('images/left_arrow.png');
+	position:absolute;
+	left:0px;
+	top:0px;
+	content:"$";
+	width:30px;
+	height:50px;
+	background-color:#f00;
+	
+}
+.main_menu:after {
+	position:absolute;
+	top:0px;
+	right:0px;
+	content:"$";
+	width:30px;
+	height:50px;
+	background-images:url('/images/right_arrow.png');
+	background-color:#000;
+}*/
+.main_menu ul
+{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+}
+.main_menu li
+{
+	float:left;
+	/*padding:0;*/
+	
+}
+.main_menu a
+{
+	display:block;
+	width:100px;
+	text-align:center;
+}
+
+#youtube .listview li {
+	display:block;
+	/*width:%;*/
+	color:#333;
+	line-height:30px;
+	/*height:30px;*/
+	padding:5px;
+	overflow:hidden;
+	
+}
+.listview-youtube {
+	display:block;
+	list-style-type:none;
+	padding:0;
+	/*width:100%;*/
+}
+.listview-youtube li {
+	display:block;
+	/*width:%;*/
+	color:#ff2424;
+	line-height:50px;
+	/*height:30px;*/
+	padding:5px 0;
+	border-top:#ff2424 solid 1px;
+	border-right:#ff2424 solid 1px;
+	border-left:#ff2424 solid 1px;
+	overflow:hidden;
+	/*text-shadow:0px 0px 5px #f1da36;*/
+}
+.listview-youtube li:last-of-type {
+	border-bottom:#ff2424 solid 1px;
+}
+.listview-youtube li .l-img {
+	width:50px;
+	height:50px;
+	padding:0px;
+	vertical-align: -40%;
+}
+.listview-youtube li .imgto {
+	display:block;
+	width:100%;
+	line-height:50px;
+	padding-right:50px;
+}
+.listview-youtube li .imgto:after {
+	float:right;
+	width:50px;
+	content:"$"
+}
+</style>
+<script>
+RMC.init(function(){
+	var sw=(RMC._SW-60);
+	var sh=RMC._SH-80;
+	$('#main_menu_bar').css({'width':sw+'px','overflow':'auto'});
+	var num=$('#main_menu li').length;
+	sw=sw/4;
+	if(sw<50) sw=50;
+	$('#main_menu li').css('width',sw+'px');
+	num=num*(sw+1);
+	$('#main_menu').css('width',num+'px');
+	if(sw<=50){
+		sh=50;
+	}
+	if(sw<=100 && sw>50){
+		sh=65;
+	}
+	if(sw>100){
+		sh=80;
+	}
+	$('#main_menu img').css('width',sh+'px');
+	sh +=10;
+	$('.main_menu').css('height',sh+'px');
+	sh=sh/2-15;
+	$('#left_arrow').css('top',sh+'px');
+	$('#right_arrow').css('top',sh+'px');
+	
+	//設定影片高度
+	var ww=RMC._SW;
+	ww=parseInt(ww/4*3);
+	$('#youtube_player').attr('height',ww);
+	
+	RMC.add_evnet('show','youtube','initqq');
+});
+
+$(document).ready(function(){
+	//RMC.add_evnet('show','youtube','initqq');
+	
+});
+function initqq()
+{
+	//alert('youtube');
+	//var cc=$('#youtube').find('.content');	
+	//alert(cc.outerHeight(true));
+	
+	//cc.attr("class","content bbgg2");
+	///alert(RMC._SH);
+
+	//var ch=cc.outerHeight(true);
+	//ch -=100;
+	//cc.css({'height':ch+'px','overflow':''});
+}
+</script>
+</head>
+<body>
+</body>
+<div class="page" id="v1">
+<div class="content bg1" tap="RMC.changepage('v2');"></div>
+</div>
+<div class="page" id="v2">
+<div class="content bg2" tap="RMC.changepage('v3');"></div>
+</div>
+<div class="page" id="v3">
+<div class="content bg3" tap="RMC.changepage('main');"></div>
+</div>
+<div class="page" id="main">
+<div class="content bbgg">
+<div class="main_menu">
+<div style="position:absolute;width:30px;left:0px;top:0px;" id="left_arrow"><img src="images/left_arrow.png" width="30" /></div>
+<div style="position:absolute;opacity:1;top:5px;left:30px;padding:0px;" id="main_menu_bar">
+<ul id="main_menu">
+<li><a href="about_us.html"><img src="images/icon/about_us.png"  /></a></li>
+<li><a href="gallery.html"><img src="images/icon/gallery.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('youtube');"><img src="images/icon/video.png"  /></a></li>
+<li><a href="contact_us"><img src="images/icon/contact_us.png"  /></a></li>
+<li><a href="alink.html"><img src="images/icon/alink.png" /></a></li>
+</ul>
+</div>
+<span style="position:absolute;width:30px;top:0px;right:0px;" id="right_arrow"><img src="images/right_arrow.png" width="30" /></span>
+</div>
+</div>
+</div>
+<div class="page" id="main2">
+<div class="content bbgg">
+這是內容
+<a onclick="RMC.changepage('t')">main2.html</a>
+<p>
+<a onclick="RMC.changepage('three')">three.html</a>
+</p>
+<span class="btn to-inline">按鈕</span>
+<span class="btn to-block">按鈕</span>
+<span class="to-block btn">按鈕</span>
+
+</div>
+</div>
+<div class="page" id="t">
+<div class="header header-bg">第二頁</div>
+<div class="content bbgg">
+這是內容
+<a onclick="RMC.backpage()">返回</a>
+<a onclick="RMC.changepage('three')">three.html</a>
+<a onclick="RMC.changepage('main')">main.html</a>
+<span class="btn">按鈕</span>
+</div>
+<div class="footer" >xxx2</div>
+</div>
+<div class="page" id="three">
+<div class="header" data-position="true">第三頁</div>
+<div class="content">
+這是內容
+<a onclick="RMC.changepage('main')">main.html</a>
+<a onclick="RMC.changepage('t')">t.html</a>
+<p>
+<a onclick="RMC.backpage()">返回</a>
+</p>
+</div>
+<div class="footer" data-position="true">xxx3</div>
+</div>
+<div class="page" id="youtubeqq">
+<div class="header header-bg" data-position="true"><span class="l-btn">首頁</span>精選影片</div>
+<div class="content">
+<ui class="listview">
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</li>
+<li><img src="images/video/14.jpg" class="l-img" />Super7 - qqq</li>
+</ui>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadfdd</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadfdd</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadfdd</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadfdd</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadf</p>
+<p>asdfadfdd</p>
+</div>
+</div>
+<div class="page" id="youtube">
+<div class="header header-bg" data-position="true"><span class="l-btn">首頁</span>精選影片</div>
+<div class="content bbgg">
+<div>
+<iframe width="100%" id="youtube_player" height="720" src="http://www.youtube.com/embed/7b_2Uf7ERkc?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+<ui class="listview-youtube">
+<li><span class="imgto">Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto">Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li><span class="imgto"><img src="images/video/14.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+</ui>
+<p>
+<a href="" class="button">button</a><br>
+<a href="" class="button lime">button</a><br>
+<a href="" class="button lime delete">button</a><br>
+asdfasd
+fasd
+adsf
+</p>
+adfasdf
+asdflasd
+asdf
+</div>
+</div>
+</html>

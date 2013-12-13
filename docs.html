@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+var READY=false;
+var DOC_URL="";
+var DOC_NAME="";
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady()
+{
+	READY=true;
+}
+function todownload(f,n)
+{
+	if(READY){
+		var networkState = navigator.connection.type;
+		if(networkState.toLowerCase()=="none"){
+			$("#tipv").html("請開啟網路!!");
+	    	$("#tipnote").popup("open");
+		}else{
+			DOC_URL=encodeURI(f);
+			DOC_NAME=n;
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function gdir(fs){
+				fs.root.getDirectory("geekers",{create:true,exclusive:false},gfe,function(e){alert(e.code)});
+			}, fail);
+		}
+		//
+	}else{
+		setTimeout("todownload("+f+","+n+")",1000);
+	}
+}
+function gfe(fe)
+{
+	var spath=fe.fullPath+"/"+DOC_NAME;
+	$( "#progressnote" ).popup( "open");
+	var fileTransfer = new FileTransfer();
+	fileTransfer.onprogress = function(progressEvent) {
+		    if (progressEvent.lengthComputable) {
+		    	var tmp=Math.floor(progressEvent.loaded / progressEvent.total * 100);
+		    	$("#prec").html(tmp/2);
+		    } else {
+		    }
+		};
+	 fileTransfer.download(
+		      DOC_URL,
+		      spath,
+		      function(entry) {
+		          $("#progressnote").popup("close");
+		           navigator.notification.alert("已下載至："+spath, alertCallback, "下載完成", "確認");
+		      },
+		      function(error) {
+		    	  navigator.notification.alert("已下載失敗", alertCallback, "提示", "確認");
+		      },
+		      false,
+		      {
+		          headers: {
+		              "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+		          }
+		      }
+		  );
+}
+function fail(e)
+{
+	
+}
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<div data-role="page" id="docs" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           文檔
+        </h3>
+    </div>
+    <div data-role="content"></div><div data-role="popup" id="tipnote" data-theme="a" style="padding:30px;"><strong id="tipv"></strong></div>
+<div data-role="popup" id="progressnote" data-theme="c" data-overlay-theme="a" style="padding:10px;">
+下載完成 <strong id="prec">0</strong> %
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+var cid="60";//$(".ui-page-active").attr("id");//$.mobile.activePage.attr("id") == "page"
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value 
+document.addEventListener("deviceready",onDeviceReady,false);
+function onDeviceReady() {
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
+	var networkState = navigator.connection.type;
+	if(networkState.toLowerCase()=="none"){
+		alert("請開啟網路!!");
+    }
+}										
+$(document).on("pageinit","#pay_note",function(){
+	
+		if(localStorage["member_id"]!=undefined && localStorage["member_id"]!="" && cid!=""){
+			$.post( "http://www.app4u.tw/buildup_ajax/get_order_serial.html", { "mid":localStorage["member_id"],"cid":cid }, function( data ) {
+					if(data.status=="y"){
+					$("#seriallist option").remove();
+					$("#seriallist").append($("<option></option>").attr("value", "").text("請選擇訂單編號"));
+					var m=data.serial.length;
+					for(var i=0;i<m;i++){
+						$("#seriallist").append($("<option></option>").attr("value", data.serial[i]).text(data.serial[i]));
+					}
+					//$("#spc"+pid).html(data.html);
+				}
+			}, "json");			
+		}	
+});
+$(document).on("pageshow","#order_search",function(){
+	//$("#order_tip").popup("open",{ transition: "pop" });
+	to_order_check();
+});
+function to_order_check()
+{
+	var url="http://www.app4u.tw/buildup_ajax/get_member_odrer.html";
+	if(localStorage["member_id"]!=undefined && localStorage["member_id"]!="" && cid!=""){
+		$.post(url,{"cid":cid,"mid":localStorage["member_id"]},function(data){
+			var tmp="";
+			if(data.status=="y"){
+				var m=data.res.length;
+				for(var i=0;i<m;i++){
+					tmp +="<li><a onclick=\"torderdetail('"+data.res[i].id+"')\">"+data.res[i].serial+" <span class=\"ui-li-count\">"+data.res[i].ltime+"</span></a></li>";
+				}
+				$("#orderul").html(tmp);
+				$("#orderul").listview("refresh");
+			}
+			$("#order_search_tip").hide();
+			//$("#order_tip").popup("close");
+		},"json");	
+	}else{	
+		alert("請先登入會員!!");
+		//$("#order_tip").popup("close");
+		$("#order_search_tip").hide();
+	}
+}
+function torderdetail(id)
+{
+	localStorage["order_id"]=id;
+	$.mobile.changePage("#order_detail",{transition:"slide"});
+}
+$(document).on("pagebeforeshow","#order_detail",function(){
+	if(localStorage["member_id"]!=undefined && localStorage["member_id"]!="" && cid!="" && localStorage["order_id"]!=undefined && localStorage["order_id"]!=""){
+		$.post( "http://www.app4u.tw/buildup_ajax/get_order_detail.html", { "mid":localStorage["member_id"],"cid":cid,"id":localStorage["order_id"] }, function( data ) {
+			if(data.status=="y"){
+				$("#d_serial").html(data.serial);
+				$("#d_status").html(data.ostatus);
+				$("#d_title").html(data.title);
+				$("#d_specif").html(data.specif);
+				$("#d_price").html(data.price);
+				$("#d_qty").html(data.qty);
+				$("#d_subtotal").html(data.subtotal);
+				$("#d_freight").html(data.freight);
+				$("#d_total").html(data.total);
+				$("#d_freight_number").html(data.freight_number);
+				$("#d_reperson").html(data.reperson);
+				$("#d_retel").html(data.retel);
+				$("#d_readdr").html(data.readdr);
+				$("#d_note").html(data.note);
+			}
+		}, "json");			
+	}
+});
+//$(document).ready(function(){					
+	//$("#pay_note").on("pageinit"),{
+		
+	//});
+//});
+function get_second(mid,obj)
+{
+	var pid=$.mobile.activePage.attr("id");
+	pid=pid.replace("product_detail","");
+	$("#spm"+pid+" .specif-sel").attr("class","specif");
+	$(obj).attr("class","specif-sel");
+	if(document.getElementById("second"+pid)){
+		$.post( "http://www.app4u.tw/buildup_ajax/get_second.html", { "master":mid,"pid":pid,"cid":cid }, function( data ) {
+			if(data.status=="y"){
+				$("#spc"+pid).html(data.html);
+			}
+		}, "json");				
+	}
+}
+function selsecond(obj)
+{
+	var pid=$.mobile.activePage.attr("id");
+	pid=pid.replace("product_detail","");
+	$("#spc"+pid+" .specif-sel").attr("class","specif");
+	$(obj).attr("class","specif-sel");	
+}
+function tobuy()
+{
+	var pid=$.mobile.activePage.attr("id");
+	pid=pid.replace("product_detail","");
+	var master="";
+	var second="";
+	var tmp="";
+	if(document.getElementById("master"+pid)){
+		master=$("#spm"+pid+" .specif-sel").attr("re");
+		if(master==undefined){
+			alert("您的規格沒有選擇");
+			return false;
+		}else{
+			if(document.getElementById("second"+pid)){
+				second=$("#spc"+pid+" .specif-sel").attr("re");
+				if(second==undefined){
+					alert("您的規格沒有選擇");
+					return false;
+				}
+			}
+		}
+	}
+	var qty=$("#qty"+pid).val();	
+	localStorage["buy_customer"]=cid;
+	localStorage["buy_product"]=pid;
+	localStorage["buy_qty"]=qty;
+	localStorage["buy_master"]=master;
+	localStorage["buy_second"]=second;
+	$.mobile.showPageLoadingMsg("c");			
+	$.post( "http://www.app4u.tw/buildup_ajax/get_buy.html", { "master":master,"second":second,"qty":qty,"pid":pid,"cid":cid }, function( data ) {
+		if(data.status=="y"){
+			$("#buy_title").html(data.title);
+			$("#buy_specif").html(data.specif);
+			$("#buy_price").html(data.price);
+			$("#buy_qty").html(data.qty);
+			$("#buy_subtotal").html(data.subtotal);
+			$("#buy_freight").html(data.freight);
+			$("#buy_total").html(data.total);
+			$("#reperson").val(localStorage["member_name"]);
+			$("#retel").val(localStorage["member_tel"]);
+			$("#readdr").val(localStorage["member_addr"]);
+			$.mobile.hidePageLoadingMsg();
+			$.mobile.changePage("#buy_write",{transition:"slide"});
+		}else alert("無法取資料<br>請確認是否有網路或重新操作");
+	}, "json");				
+}
+function tocheck()
+{
+	$.mobile.showPageLoadingMsg("c");
+	var err="";
+	var name=$("#reperson").val();
+	var tel=$("#retel").val();
+	var addr=$("#readdr").val();
+	if(name=="") err +="收件人姓名錯誤!!\n";
+	if(tel=="") err +="收件人電話錯誤!!\n";
+	if(addr=="") err +="收件人地址錯誤!!\n";
+			
+	if(err!="") {
+		$.mobile.hidePageLoadingMsg();
+		alert(err);	
+		return false;
+	}
+	var pay_type=$("#pay_type :checked").val();
+	var renote=$("#renote").val();
+	$("#qty"+localStorage["buy_product"]).val("1");	
+	$("#qty"+localStorage["buy_product"]).slider("refresh");	
+	$.post( "http://www.app4u.tw/buildup_ajax/buycheck.html", {"appname":localStorage["appname"],"mid":localStorage["member_id"],"note":renote,"pay_type":pay_type, "name":name,"tel":tel,"addr":addr,"cid":localStorage["buy_customer"],"pid":localStorage["buy_product"],"qty":localStorage["buy_qty"],"master":localStorage["buy_master"],"second":localStorage["buy_second"] }, function( data ) {
+		if(data.status=="y"){
+			//alert("資料已送出");
+			$("#serial").html(data.serial);
+			if(data.pay_type=="1"){
+				$("#payv").css("display","");
+			}else $("#payv").css("display","none");
+			$("#renote").val("");
+			$.mobile.changePage("#buyok",{transition:"slide"});
+		}else{
+			alert("無法取資料!!請確認是否有網路或重新操作");
+		}
+		$.mobile.hidePageLoadingMsg();
+	}, "json");	
+}
+var upimg;
+function onPhotoURISuccess(imageURI) {
+	var largeImage = document.getElementById("paynoteimg");
+	largeImage.style.display = "block";
+	largeImage.src = imageURI;
+	upimg=imageURI;
+}
+function getPhoto(source) {
+	  // Retrieve image file location from specified source
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+    destinationType: destinationType.FILE_URI,
+    sourceType: source });
+}
+
+function onFail(message) {
+	//alert("Failed because: " + message);
+}
+function topaynote()
+{
+	var o1=$("#seriallist").val();
+	var o2=$("#seriallist2").val();
+	if(o1=="" && o2==""){
+		alert("請選擇或填寫訂單編號");
+		return false;
+	}else{
+		if(o2!=""){
+			var seid=o2;
+		}else{
+			var seid=o1
+		}
+	}
+	if(upimg==undefined || upimg==""){
+		alert("請選擇匯款轉帳號收據圖片");
+		return false;
+	}
+	$.mobile.showPageLoadingMsg("c");
+	var url = "http://www.app4u.tw/buildup_ajax/upload_pay_note.html";
+    var params = {"serial":seid,"pict": upimg};
+   
+    var options = new FileUploadOptions();
+    options.fileKey="pict";
+    options.fileName=upimg.substr(upimg.lastIndexOf("/")+1);
+    options.mimeType="image/jpeg";//"text/plain";
+
+    var params = new Object();
+    params.serial = seid;
+    params.cid = cid;
+
+    options.params = params;
+    options.chunkedMode = false;
+
+    var ft = new FileTransfer();
+    ft.upload(upimg, url, uploadwin, uploadfail, options);
+}
+function uploadwin(r) {
+    if(r.response=="y"){
+    	uping="";
+    	document.getElementById("paynoteimg").src="";
+    	document.getElementById("paynoteimg").style.display="none";
+    	$("#seriallist").find(":selected").remove();
+    	alert("資料已送出!!");
+    }else alert("資料錯誤或檔案太大!!");
+    $.mobile.hidePageLoadingMsg();
+}
+function uploadfail(error) {
+    //alert("An error has occurred: Code = " = error.code);
+    $.mobile.hidePageLoadingMsg();
+}
+function onPhotoDataSuccess(imageData) {
+	  var smallImage = document.getElementById("paynoteimg");
+	  smallImage.style.display = "block";
+	  smallImage.src = imageData;//"data:image/jpeg;base64," + imageData;
+	  upimg=imageData;//"data:image/jpeg;base64," + imageData;
+}
+function capturePhoto() {
+	  // Take picture using device camera and retrieve image as base64-encoded string
+	  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+}			
+</script>
+<style>
+
+.sf {
+	color:#222;
+	text-shadow:1px 1px 1px #fff;
+}			
+.listimg {
+display:inline-block;width:96%;background:#fff;padding:5px 0px; overflow:hidden;text-overflow:ellipsis;white-space: nowrap;
+}
+.showimg {
+max-width:400px;
+width:80%;
+}
+.ca {
+color:#fff;
+font-size:15px;font-weight:bold;
+text-shadow:1px 1px 1px #fff;
+color:#333;					
+}										
+.more {
+display:inline-block;
+padding:5px;
+color:#fff;
+margin-top:10px;
+background: rgb(136,191,232); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(136,191,232,1) 0%, rgba(112,176,224,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(136,191,232,1)), color-stop(100%,rgba(112,176,224,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* W3C */					
+}
+.price {
+	font-size:13px;
+	color:#B3B800;				
+}
+.check-price {
+	font-size:20px;
+	font-weight:bold;
+	color:#f00;
+	text-shadow:1px 1px 2px #fff;		
+}
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc); 
+    background-image:    -moz-linear-gradient(left, #ccc, #333, #ccc); 
+    background-image:     -ms-linear-gradient(left, #ccc, #333, #ccc); 
+    background-image:      -o-linear-gradient(left, #ccc, #333, #ccc); 
+}
+.specif {
+display:inline-block;
+padding:5px;
+background:#B3B800;
+color:#fff;	
+cursor:pointer;	
+margin-left:3px;
+}
+.specif-sel {
+display:inline-block;
+padding:5px;
+background:#8f0222;
+color:#fff;	
+cursor:pointer;	
+margin-left:3px;		
+}
+.panelbg {
+background:#b3b800;
+margin:0px;		
+}
+a,a:link,a:visited{text-decoration: none}			
+.panellist {
+background:#fff;
+color:#333;
+height:30px;
+line-height:30px;
+padding:5px;
+margin-bottom:1px;
+text-shadow:1px 1px 1px #eee;
+border-left:#e84097 solid 4px;
+text-decoration:none;		
+}
+.panellist:hover {
+	background:#ccd400;	
+	border-left:#12aacf solid 4px;
+	color:#fff;
+	text-shadow:1px 1px 1px #333;
+}										
+</style>
+</head>
+<body>
+<div data-role="page" id="product" >
+<div data-role="panel" id="mypanel" data-display="push" data-position="right" class="panelbg">
+<div data-role="listview" >
+<div class="panelbg" >
+	<a href="#order_search" data-transition="slide"><div class="panellist">訂單查詢</div><a>	
+	<a href="#pay_note" data-transition="slide"><div class="panellist">填寫匯款通知</div></a>	
+	<a href="#buy_note" data-transition="slide"><div class="panellist">購物說明</div></a>	
+	<a href="#product" data-rel="close"><div class="panellist">關閉</div></a>						
+</div>
+</div>
+</ul>
+			
+</div>
+	<div data-theme="c" data-role="header" data-position="fixed">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+			
+        <h3>
+           購買商品
+        </h3>
+		 <a href="#mypanel" data-icon="bars" >選項</a>	 
+    </div>
+    <div data-role="content" style="background:#eee;padding:10px;"></div>
+</div>
+<div data-role="page" id="buy_write">
+	<div data-theme="c" data-role="header">
+		<a href="" data-role="button" data-icon="back" onclick="history.go(-1);">返回</a>						
+        <h3>
+            結 帳
+        </h3>
+    </div>
+    <div data-role="content">
+		<h2>商品資訊</h2>
+		<ul data-role="listview" data-divider-theme="c" data-inset="true">
+			<li data-role="fieldcontain"><label for="reperson">名稱</label><span id="buy_title"></span></li>
+			<li data-role="fieldcontain"><label for="reperson">規格</label><span id="buy_specif"></span></li>
+			<li data-role="fieldcontain"><label for="reperson">數量</label><span id="buy_qty"></span></li>
+			<li data-role="fieldcontain"><label for="reperson">單價</label><span id="buy_price"></span></li>
+			<li data-role="fieldcontain"><label for="reperson">合計</label><span id="buy_subtotal"></span></li>					
+		</ul>					
+		<h2>結帳金額</h2>
+		<ul data-role="listview" data-divider-theme="c" data-inset="true">
+			<li data-role="fieldcontain"><label for="reperson">運費</label>NT$ <span id="buy_freight" class="check-price"></span></li>									
+			<li data-role="fieldcontain"><label for="reperson">應付金額</label>NT$ <span id="buy_total" class="check-price"></span></li>					
+		</ul>
+		<h2>收件人資料</h2>
+		<ul data-role="listview" data-divider-theme="c" data-inset="true">
+        <li data-role="fieldcontain">
+            <label for="reperson">
+                收件人姓名
+            </label>
+            <input name="" id="reperson" placeholder="收件人姓名" value="" type="text">
+        </li>
+        <li data-role="fieldcontain">
+            <label for="retel">
+                收件人電話
+            </label>
+            <input name="" id="retel" placeholder="收件人電話" value="" type="text">
+        </li>
+        <li data-role="fieldcontain">
+            <label for="readdr">
+                收件人地址
+            </label>
+            <input name="" id="readdr" placeholder="收件人地址" value="" type="text">
+        </li>
+		<li data-role="fieldcontain">
+            <label for="renote">
+                備註
+            </label>
+            <textarea cols="30 rows="3" id="renote"></textarea>
+        </li>
+		</ul>
+		<h2>付款方式</h2>
+		<ul data-role="listview" data-divider-theme="c" data-inset="true">
+        <li data-role="fieldcontain" id="pay_type">
+            <input type="radio" name="pay_type" id="pay_type1" value="1" checked >
+        	<label for="pay_type1">匯款轉帳</label>
+        </li>
+		</ul>
+		<input type="button" data-theme="c" value="確認購買" onclick="tocheck()">
+    </div>
+</div>
+<div data-role="page" id="buyok">
+    <div data-theme="c" data-role="header">
+        <a data-role="button" href="#product" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a><h3>
+            訂購完成
+        </h3>
+    </div>
+    <div data-role="content">
+	感謝您的訂購！！您的訂單編號為 <span id="serial"></span>
+    <div id="payv" style="display:none;"><h2>轉帳匯款帳號</h2>
+	<ul data-role="listview" data-divider-theme="c" data-inset="true">
+        <li data-role="fieldcontain"><label for="reperson">匯款銀行</label> </li>
+		<li data-role="fieldcontain"><label for="reperson">匯款帳號</label> </li>
+	</ul>匯款完成！！請記得填寫匯款通知<br><a href="#pay_note" data-role="button">填寫匯款通知</a></div>						
+    </div>
+</div><div data-role="page" id="buy_note">
+<div data-theme="c" data-role="header"><a data-role="button" href="#product" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a>
+        <h3>
+            購物說明
+        </h3>
+    </div>
+    <div data-role="content">
+   
+    <ul data-role="listview"  >
+			<li></li>
+    </ul>
+		
+    </div>
+</div>
+<div data-role="page" id="pay_note">
+    <div data-theme="c" data-role="header"><a data-role="button" href="#product" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a>
+        <h3>
+            填寫匯款通知
+        </h3>
+    </div>
+    <div data-role="content">
+			<ul data-role="listview" data-divider-theme="c" data-inset="true">
+        <li data-role="fieldcontain">
+            <label for="seriallist">
+                訂單編號
+            </label>
+			<h4>選擇訂單編號</h4>
+			<p>
+            <select  id="seriallist">
+    		    <option value="">選擇訂單編號</option>
+		    </select>
+			</p>
+			<h4>或輸入訂單編號</h4>
+			<p><input type="text" id="seriallist2" /></p>
+        </li>
+		<li data-role="fieldcontain">
+           <label for="paynotepict">
+                 匯款轉帳單據
+            </label>
+            <p style="text-align:center;padding-top:10px;"><img src="" width="100" id="paynoteimg" style="display:none;" /></p>
+            <input type="button" data-theme="c" value="從相機" onclick="capturePhoto()">
+            <input type="button" data-theme="c" value="從圖庫" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">
+		</li>
+    	<li><input type="button" data-theme="c" value="確認送出" onclick="topaynote()"></li>
+		</ul>
+    </div>
+</div>
+<div data-role="page" id="order_search">
+<div data-theme="c" data-role="header"><a data-role="button" href="#product" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a>
+        <h3>
+            訂單查詢
+        </h3>
+    </div>
+    <div data-role="content">
+    <ul data-role="listview" id="order_search_tip"><li style="text-align:center;">資料更新中</li></ul>
+    <ul id="orderul" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="查詢訂單編號">
+    </ul>
+		<div data-role="popup" id="order_tip" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
+		   
+		    <div data-role="content" data-theme="c" class="ui-corner-bottom ui-content">
+		        <h3 class="ui-title">資料更新中...</h3>
+		    </div>
+		</div>
+    </div>
+</div>
+<div data-role="page" id="order_detail">
+<div data-theme="c" data-role="header"><a data-role="button" href="#order_search" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a>
+        <h3>
+            訂單內容
+        </h3>
+    </div>
+    <div data-role="content">
+		 <h3>訂單內容</h3>
+		 <ul data-role="listview" data-inset="true" >
+    	 <li data-role="fieldcontain">
+    	    <label>訂單編號：</label>
+            <span id="d_serial"></span>
+    	 </li>
+    	 <li data-role="fieldcontain">
+    	    <label>狀態：</label>
+            <span id="d_status"></span>
+    	 </li>
+    	 </ul>
+		 <h3>商品資訊</h3>
+		 <ul data-role="listview" data-inset="true" >
+		 <li data-role="fieldcontain">
+    	    <label for="d_title">名稱：</label>
+            <span id="d_title"></span>
+    	 </li>
+    	 <li data-role="fieldcontain">
+    	    <label for="d_specif">規格：</label>
+            <span id="d_specif"></span>
+    	 </li>
+    	 <li data-role="fieldcontain">
+    	    <label for="d_price">單價：</label>
+            <span id="d_price"></span>
+    	 </li>
+    	 <li data-role="fieldcontain">
+    	    <label for="d_qty">數量：</label>
+            <span id="d_qty"></span>
+    	 </li>
+    	 <li data-role="fieldcontain">
+    	    <label for="d_subtotal">合計：</label>
+            <span id="d_subtotal"></span>
+    	 </li>
+		 <li data-role="fieldcontain">
+    	    <label for="d_freight">運費：</label>
+            <span id="d_freight"></span>
+    	 </li>
+		 <li data-role="fieldcontain">
+    	    <label for="d_total">總計：</label>
+            <span id="d_total"></span>
+    	 </li>
+		 </ul>
+		 <h3>貨運資料</h3>
+		<ul data-role="listview" data-inset="true" >
+		<li data-role="fieldcontain">
+    	    <label for="d_freight_number">貨運單號：</label>
+            <span id="d_freight_number"></span>
+    	 </li>
+		<li data-role="fieldcontain">
+    	    <label for="d_">收件人：</label>
+            <span id="d_reperson"></span>
+    	 </li>
+		<li data-role="fieldcontain">
+    	    <label for="d_retel">收件人電話：</label>
+            <span id="d_retel"></span>
+    	 </li>
+		<li data-role="fieldcontain">
+    	    <label for="d_readdr">收件人地址：</label>
+            <span id="d_readdr"></span>
+    	 </li>
+		<li data-role="fieldcontain">
+    	    <label for="d_note">備註：</label>
+            <span id="d_note"></span>
+    	 </li>
+		</ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+var cid="60";
+$(document).on("pageshow","#rss",function(){
+	to_rss_check();
+});
+function to_rss_check()
+{
+	var url="http://www.app4u.tw/buildup_ajax/get_rss.html";
+	if(cid!=""){
+		$.post(url,{"cid":cid},function(data){
+			if(data.status=="y"){
+				var m=data.res.length;
+				var tmp="";
+				for(var i=0;i<m;i++){
+					tmp +="<li data-theme=\"c\"><a href=\""+data.res[i].url+"\" data-ajax=\"false\">"+data.res[i].title+" <span class=\"ui-li-count\">"+data.res[i].time+"</span></a></li>";
+				}
+				$("#rssul").html(tmp);
+				$("#rssul").listview("refresh");
+			}
+			$("#rss_tip").hide();
+		},"json");	
+	}else{
+		$("#rss_tip").hide();
+	}
+}
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<div data-role="page" id="rss" >
+	<div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           RSS
+        </h3>
+    </div>
+    <div data-role="content"><ul data-role="listview" id="rss_tip"><li style="text-align:center;">資料更新中</li></ul></div>
+</div>
+
+</body>
+</html>

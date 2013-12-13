@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>數位玩家</title>
+<script type="text/javascript" src="cordova.js"></script>
+<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
+<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
+<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
+<script type="text/javascript" src="js/pushmsg.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
+					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
+				});
+$(document).on("pageinit","#member_show",function(e,data){
+	$("#ename").val(localStorage["member_name"]);
+   	$("#etel").val(localStorage["member_tel"]);
+   	$("#eaddr").val(localStorage["member_addr"]);
+});	
+$(document).on("pageshow","#member",function(e,data){
+	var id=localStorage["member_id"];
+	if(id!=undefined && id!=""){		
+		$.mobile.changePage("#member_show",{transition:"slide"});	
+	}			
+});						
+$(document).ready(function(){
+	var networkState = navigator.connection.type;
+	if(networkState.toLowerCase()=="none"){
+		alert("請開啟網路!!");
+    }	
+});
+function ckjoin(){
+	var cid="60";
+	var err="";
+	var name=$("#name").val();
+	if(name=="") err +="姓名沒有填寫\n";
+	var pwd=$("#pwd").val();
+	if(pwd=="") err +="密碼沒有填寫\n";
+	var tel=$("#tel").val();
+	if(tel=="") err +="電話沒有填寫\n";
+	var addr=$("#addr").val();
+	if(addr=="") err +="地址沒有填寫\n";
+	var email=$("#email").val();	
+	if(email=="") err +="信箱沒有填寫\n";
+	var re = new RegExp(/^(([0-9a-zA-Z_.]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*[0-9a-zA-Z_.]+))@([a-zA-Z0-9-]+[.])+([a-zA-Z]{2}|net|NET|com|COM|gov|GOV|mil|MIL|org|ORG|edu|EDU|int|INT|biz|BIZ|idv|IDV|cc|CC)$/);
+    var ckstr=re.test(email);
+	if(!ckstr) err +="信箱格式錯誤\n";
+	if(err!="") {
+		alert(err);	
+		return false;
+	}
+	var fd = new FormData();
+	fd.append("customer_id",cid);
+	fd.append("name",name);
+	fd.append("tel",tel);
+	fd.append("email",email);
+	fd.append("addr",addr);
+	fd.append("pwd",pwd);
+
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", join_ok, false);
+    xhr.addEventListener("error", join_error, false);
+    xhr.open("POST", "http://www.app4u.tw/buildup_ajax/member_join.html");  
+    xhr.send(fd);
+}
+function join_ok(e)
+{
+    alert(e.target.responseText);
+    if(e.target.responseText=="加入會員完成"){
+		$.mobile.changePage("#member_login",{ transition: "slide", changeHash: false });
+	}		
+}
+function join_error(e)
+{
+	alert("傳送失敗!!請確認網路正常連線");
+}
+function cklogin()
+{
+   	var cid="60";
+	var err="";
+    var pwd=$("#jpwd").val();
+	if(pwd=="") err +="密碼沒有填寫\n";
+	var email=$("#jemail").val();
+    var re = new RegExp(/^(([0-9a-zA-Z_.]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*[0-9a-zA-Z_.]+))@([a-zA-Z0-9-]+[.])+([a-zA-Z]{2}|net|NET|com|COM|gov|GOV|mil|MIL|org|ORG|edu|EDU|int|INT|biz|BIZ|idv|IDV|cc|CC)$/);
+    var ckstr=re.test(email);
+	if(!ckstr) err +="信箱格式錯誤\n";
+	if(err!="") {
+		alert(err);	
+		return false;
+	}
+		
+    $.post( "http://www.app4u.tw/buildup_ajax/member_login.html", { "email":email,"pwd":pwd,"cid":cid }, function( data ) {
+  		if(data.name!=undefined){
+			localStorage["member_id"]=data.id;
+    		localStorage["member_name"]=data.name;
+    		localStorage["member_tel"]=data.tel;
+    		localStorage["member_addr"]=data.addr;
+    		localStorage["member_email"]=data.email;
+    		$("#ename").val(data.name);
+    		$("#epwd").val(data.pwd);
+    		$("#etel").val(data.tel);
+    		$("#eaddr").val(data.addr);
+    		$.mobile.changePage("#member_show",{transition:"slide"});
+		}
+	}, "json");
+}
+function ckedit()
+{
+	var cid="60";
+	var err="";
+	var name=$("#ename").val();
+	if(name=="") err +="姓名沒有填寫\n";
+	var tel=$("#etel").val();
+	if(tel=="") err +="電話沒有填寫\n";
+	var addr=$("#eaddr").val();
+	if(addr=="") err +="地址沒有填寫\n";
+	if(err!="") {
+		alert(err);	
+		return false;
+	}
+
+    $.post( "http://www.app4u.tw/buildup_ajax/member_update.html", { "name":name,"tel":tel,"addr":addr,"cid":cid,"id":localStorage["member_id"] }, function( data ) {
+  		if(data.name!=undefined){
+    		localStorage["member_name"]=data.name;
+    		localStorage["member_tel"]=data.tel;
+    		localStorage["member_addr"]=data.addr;
+    		alert("資料已更新");
+		}
+	}, "json");
+}
+function ckpwd()
+{
+    var cid="60";
+	var err="";
+	var pwd=$("#epwd").val();
+	if(pwd=="") err +="密碼沒有填寫\n";
+    if(err!="") {
+		alert(err);	
+		return false;
+	}
+    $.post( "http://www.app4u.tw/buildup_ajax/member_password.html", { "pwd":pwd,"id":localStorage["member_id"] }, function( data ) {
+  		if(data.status=="y"){
+    		alert("密碼已更新");
+		}
+	}, "json");
+}    		
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<div data-role="page" id="member" >
+	<div data-theme="c" data-role="header" data-position="fixed">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>
+        <h3>
+           加入會員
+        </h3>
+    </div>
+    <div data-role="content"><form action="" method="POST" id="member_join" style="background:#eee;padding:15px;">
+            <div data-role="fieldcontain">
+                <label for="name">
+                    姓名
+                </label>
+                <input name="name" id="name" placeholder="姓名" value="" type="text">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="pwd">
+                    密碼
+                </label>
+                <input name="pwd" id="pwd" placeholder="密碼" value="" type="password">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="tel">
+                    電話
+                </label>
+                <input name="tel" id="tel" placeholder="電話" value="" type="text">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="addr">
+                    地址
+                </label>
+                <input name="addr" id="addr" placeholder="地址" value="" type="text">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="email">
+                    信箱
+                </label>
+                <input name="email" id="email" placeholder="信箱" value="" type="email">
+				<span>註冊後不能更改</span>				
+            </div>
+            <input type="button" value="確認送出" onclick="ckjoin()">
+			 <a data-role="button" data-inline="true" data-transition="slide" data-theme="c"
+            href="#member_login">
+                登入
+            </a>
+        </form></div>
+</div>
+<div data-role="page" id="member_login">
+    <div data-theme="c" data-role="header"><a data-role="button" href="#member" data-icon="back"  data-iconpos="left" data-transition="slide" data-direction="reverse"
+        class="ui-btn-left" >返回</a><h3>會員登入</h3></div>
+    <div data-role="content">
+        <form action="" style="background:#eee;padding:15px;">
+            <div data-role="fieldcontain">
+                <label for="jemail">
+                    信箱
+                </label>
+                <input name="jemail" id="jemail" placeholder="請輸入信​​箱" value="" type="text">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="jpwd">
+                    密碼
+                </label>
+                <input name="jpwd" id="jpwd" placeholder="請輸入密碼" value="" type="password">
+            </div>
+            <input type="button" data-theme="c" value="登入" onclick="cklogin()">
+        </form>
+    </div>
+</div>
+<div data-role="page" id="member_show">
+    <div data-theme="c" data-role="header">
+    <a data-role="button" href="index.html" data-icon="home"  data-iconpos="left"
+        class="ui-btn-left" data-ajax="false">
+            首頁
+        </a>		
+    <h3>修改會員資料</h3></div>
+    <div data-role="content">
+        <form action="" style="background:#eee;padding:15px;">
+    		 <h2>
+            個人資料
+        </h2>
+    		<div  data-role="fieldcontain">
+    		<label for="ename">
+                    姓名
+                </label>
+                <input name="ename" id="ename" placeholder="姓名" value="" type="text">
+            </div>
+            
+            <div data-role="fieldcontain">
+                <label for="etel">
+                    電話
+                </label>
+                <input name="etel" id="etel" placeholder="電話" value="" type="text">
+            </div>
+            <div data-role="fieldcontain">
+                <label for="eaddr">
+                    地址
+                </label>
+                <input name="eaddr" id="eaddr" placeholder="地址" value="" type="text">
+            </div>
+            <input type="button" data-theme="c" value="修改資料" onclick="ckedit()">
+    		 <h2>
+            密碼資料
+        </h2>
+    		<div data-role="fieldcontain">
+                <label for="epwd">
+                    密碼
+                </label>
+                <input name="epwd" id="epwd" placeholder="密碼" value="" type="password">
+    		
+    		<input type="button" data-theme="c" value="修改密碼" onclick="ckpwd()">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
