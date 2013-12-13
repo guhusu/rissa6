@@ -143,6 +143,14 @@ background: url(images/newbg.jpg);
    #nav li a:hover {
       color: #c00;
       background-color: #fff; }
+   #nav li a:active {
+   	  color:#fff;
+   	  background:#e00;
+   }
+   #nav li a.sel {
+   	color:#fff;
+   	  background:#e00;
+   }
 </style>
 <script>
 RMC.init(function(){
@@ -233,7 +241,7 @@ function initqq()
 }
 function about_us(id)
 {
-	$('#about_us .menu-a').attr('class','menu-a');
+	$('#nav .sel').removeClass('sel');
 	$('#d'+id).addClass('sel');
 	if(id=='av2'){
 		$('#av1').css('display','none');
@@ -243,6 +251,16 @@ function about_us(id)
 		$('#av2').css('display','none');
 		$('#av1').css('display','');
 	}
+	/*$('#about_us .menu-a').attr('class','menu-a');
+	$('#d'+id).addClass('sel');
+	if(id=='av2'){
+		$('#av1').css('display','none');
+		$('#av2').css('display','');
+		//$('#av2').fadeIn();
+	}else{
+		$('#av2').css('display','none');
+		$('#av1').css('display','');
+	}*/
 }
 </script>
 </head>
@@ -266,8 +284,8 @@ function about_us(id)
 <li><a href="javascript:RMC.changepage('about_us');"><img src="images/icon/about_us.png"  /></a></li>
 <li><a href="gallery.html"><img src="images/icon/gallery.png"  /></a></li>
 <li><a href="javascript:RMC.changepage('youtube');"><img src="images/icon/video.png"  /></a></li>
-<li><a href="contact_us.html"><img src="images/icon/contact_us.png"  /></a></li>
-<li><a href="alink.html"><img src="images/icon/alink.png" /></a></li>
+<li><a href="javascript:RMC.changepage('contact_us');"><img src="images/icon/contact_us.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('alink');"><img src="images/icon/alink.png" /></a></li>
 </ul>
 </div>
 <span style="position:absolute;width:30px;top:0px;right:0px;" id="right_arrow"><img src="images/right_arrow.png" width="30" /></span>
@@ -275,16 +293,11 @@ function about_us(id)
 </div>
 </div>
 <div class="page" id="about_us">
-<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>關於妞妞
-<div class="menu">
-<div class="menu-a sel" tap="about_us('av1')" id="dav1">基本資料</div>
-<div class="menu-a" tap="about_us('av2')" id="dav2">主要經歷</div>
-</div>
-</div>
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>關於妞妞</div>
 <div class="content bbgg2">
 <ul id="nav">
-      <li><a href="#">基本資料</a></li>
-      <li><a href="#">主要經歷</a></li>
+      <li><a id="dav1" href="javascript:about_us('av1');" class="sel">基本資料</a></li>
+      <li><a id="dav2" href="javascript:about_us('av2');">主要經歷</a></li>
    </ul>
 <div id="av1">
 <table align="center" border="0" cellpadding="1" cellspacing="1" style="width:100%">
@@ -306,7 +319,7 @@ function about_us(id)
 	</tbody>
 </table>
 </div>
-<div id="av2" style="display:none;" style="color:#fff;">
+<div id="av2" style="display:none;color:#fff;">
 <p><span style="font-size:16px"><span style="font-family:新細明體">主要經歷：</span><span style="font-family:calibri"> </span></span></p>
 
 <p><span style="font-size:16px"><span style="font-family:新細明體">百戰大勝利　　辣妹正音班　專屬舞蹈團體<br />
@@ -340,8 +353,31 @@ function about_us(id)
 <span style="font-family:calibri">達富國際旅遊代言人、蘋果日報鋼管塑身代言人、瑪格麗特專屬鋼管老師<br />
 獨家報導專訪、壹週刋專訪</span></span><span style="font-family:calibri; font-size:12pt"> </span></p>
 </div>
+
 </div>
 </div>
+<!-- facebook-contact_us -->
+<div class="page" id="contact_us">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>妞妞臉書</div>
+<div class="content bbgg2">
+<div style="text-align:center;padding-top:50px;"><a href="https://www.facebook.com/Super7Cherryfans"><img src="img/pic.jpg" border="0" style="width:150px;height:150px;border-radius:75px;box-shadow:0px 0px 10px #f1da36;opacity:0.8;" /></a></div>
+<p style="text-align:center"><span style="font-size:18px"><a href="https://www.facebook.com/Super7Cherryfans" style="color:#fff;">妞妞臉書(請點擊)</a></span></p>
+</div>
+</div>
+<!-- facebook-contact_us -->
+<!-- alink -->
+<div class="page" id="alink">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>推薦連結</div>
+<div class="content bbgg2">
+<ul class="listview-alink">
+<li><a href="http://www.ak9k.com"><span class="txtto">笑話集</span></a></li>
+<li><a href="http://ananedu.com/proverb/i2taiwandesk.htm"><span class="txtto">台灣俚語</span></a></li>
+<li><a href="http://www.app4u.tw"><span class="txtto">APP4U官網</span></a></li>
+<li><a href="https://www.facebook.com/digitalplayers"><span class="txtto">APP4U粉絲團</span></a></li>
+</ul>
+</div>
+</div>
+<!-- alink -->
 <div class="page" id="youtube">
 <div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>精選影片</div>
 <div class="content bbgg2">
