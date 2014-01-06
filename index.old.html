@@ -2,106 +2,666 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>數位玩家</title>
-<script type="text/javascript" src="cordova.js"></script>
-<link rel="stylesheet" href="skin/jquerymobile/cs1.min.css" />
-<link rel="stylesheet" href="skin/jquerymobile/jquery.mobile.structure-1.3.1.min.css" />
-<script type="text/javascript" src="js/jquerymobile/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="js/jquerymobile/jquery.mobile-1.3.1.min.js"></script>
-<script type="text/javascript" src="js/pushmsg.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function () {
-  
-});
-
-
-$(document).ready(function () {
-					$("div[data-role=header]").each(function(){$(this).addClass("ui-header-fixed");});
-					$("div[data-role=content]").each(function(){$(this).css("margin-top","43px");});
-				});
-$(document).ready(function(){$("#pushmsga").click(function(){$.mobile.changePage("#pushmsg",{transition:"slide"})})});
-$(document).on("pagebeforeshow","#main",function(c,d){var b=document.documentElement.clientWidth,a=document.documentElement.clientHeight;document.getElementById("main").width=b;document.getElementById("main").height=a;document.getElementById("maindiv")&&(document.getElementById("mainbutton")&&(sh=0.8*a,document.getElementById("maindiv").style.paddingTop=sh+"px",a>sh&&(a-=sh)),document.getElementById("maindiv").style.width=b+"px",document.getElementById("maindiv").style.height=a+"px")});
-$(document).on("pageshow","#main",function(){void 0!=window.sessionStorage.main&&"yes"==window.sessionStorage.main&&$.mobile.changePage("#page1",{transition:"none"})});$(document).on("pagehide","#main",function(){window.sessionStorage.main="yes";});
-$(document).on("pageshow","#page1",function(c,d){""!=localStorage.pushmsg_data&&($("#pushmsga").css("display",""),$("#pushmsgcount").html(localStorage.not_read_count));0>=localStorage.not_read_count&&$("#pushmsgcount").css("display","none")});
-$(document).on("pageshow","#pushmsg",function(c,d){localStorage.not_read_count=0;void 0==$("#pushmsg").data("foo")&&($("#pushmsgcc").html(localStorage.pushmsg_data),document.getElementById("pushmsgul")||$("#pushmsgcc").html('<ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul"></ul>'),$("#pushmsg [data-role=listview]").listview(),""!=localStorage.pushmsg_tmp&&($("#pushmsgul").prepend(localStorage.pushmsg_tmp),$("#pushmsgul").listview("refresh"),localStorage.pushmsg_data=
-$("#pushmsgcc").html(),localStorage.pushmsg_tmp=""),$("#pushmsg").data("foo","yes"));""!=localStorage.pushmsg_tmp&&($("#pushmsgul").prepend(localStorage.pushmsg_tmp),$("#pushmsgul").listview("refresh"),localStorage.pushmsg_data=$("#pushmsgcc").html(),localStorage.pushmsg_tmp="");if(3<$("#pushmsgul > li").length){var a="",b=1;$("#pushmsgul > li").each(function(){3>=b&&(a+='<li class="ui-li ui-li-static ui-btn-up-c ui-first-child">'+$(this).html()+"</li>");b++});a='<ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul">'+
-a+"</ul>";localStorage.pushmsg_data=a}});
-</script>
+<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0">
+<title>RMC</title>
+<link href="rmccss/rmc2.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/jquery.touchswipe.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/iscroll.js"></script>
+<script type="text/javascript" charset="utf-8" src="rmcjs/rmc2.min.js"></script>
+<link rel="stylesheet" href="skin/photoswipe/photoswipe.css" /> 
+<script type="text/javascript" src="js/photoswipe/klass.min.js"></script>
+<script src="js/photoswipe/code.photoswipe-3.0.4.min.js"></script>
 <style>
-.ui-page.ui-body-c.ui-page-active {
-background: url(images/bg.jpg) no-repeat center center scroll;
+.main_header {
+	color:#333;
+	background:#fff;
+}
+.bbgg2{
+background: url(images/newbg.jpg);  
+-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.bbgg {
+	background: url(images/bg.jpg) center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
-.cvt {
-margin:0px;
-padding:70% 0px 0px 0px;
-text-align:center;
+.bg1 {
+	background: url(images/home/001.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
-.cs {
-float:left;width:20%;margin:0px;text-align:center;padding-bottom:20px;
+.bg2 {
+	background: url(images/home/002.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
-.vbtn {
-	display:inline-block;
-	width:83px;
-	height:83px;
+.bg3 {
+	background: url(images/home/003.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.music_play {
+	position:absolute;
+	left:0px;
+	bottom:20px;
+	height:30px;
 	line-height:30px;
+	background:rgba(255,255,255,0.8);
+	width:100%;
+	overflow:hidden;
+	box-shadow:0px 0px 5px #f1da36;
+}
+.play_img {
+	display:inline-block;
+	height:30px;
+	vertical-align: middle;
+	width:30px;
+	padding-left:10px;
+}
+.play_bar {
+	dislay:inline-block;
+}
+.main_menu {
+	position:absolute;
+	left:0px;
+	bottom:70px;
+	background:rgba(255,255,255,0.8);
+	/*opacity:0.7;*/
+	width:100%;
+	height:50px;
+	box-shadow:0px 0px 5px #f1da36;
+}
+/*.main_menu:before {
+	background:url('images/left_arrow.png');
+	position:absolute;
+	left:0px;
+	top:0px;
+	content:"$";
+	width:30px;
+	height:50px;
+	background-color:#f00;
+	
+}
+.main_menu:after {
+	position:absolute;
+	top:0px;
+	right:0px;
+	content:"$";
+	width:30px;
+	height:50px;
+	background-images:url('/images/right_arrow.png');
+	background-color:#000;
+}*/
+.main_menu ul
+{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+}
+.main_menu li
+{
+	float:left;
+	/*padding:0;*/
+	
+}
+.main_menu a
+{
+	display:block;
+	width:100px;
 	text-align:center;
-	margin-top:0.1em;
-	color:#fff;
-	/*text-shadow:1px 1px 1px #333;*/
-	/*padding-top:29px;*/
 }
-.ctv {
-margin:0px;
-padding:2% 0px 0px 0px;
-text-align:center;
+.menu{
 }
-.mainbtn {position:absolute;top:0px;left:0px;z-index:2;padding:0px;margin:0px;text-align:center;}
-.msgtipb {position:absolute;top:-8px;left:20px;background:#ed1d24;color:#fff;padding:2px;border-radius:0px;}
-.chat {position:absolute;top:10px;right:24px;width:24px;height:19px;background:url('images/chat.png');}
-<!-- css_start -->
-.uitest {}.ui-icon-about_us{background-image:url(images/about_us.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
-.ui-icon-gallery{background-image:url(images/gallery.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
-.ui-icon-video{background-image:url(images/video.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
-.ui-icon-contact_us{background-image:url(images/contact_us.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
-.ui-icon-alink{background-image:url(images/alink.png);background-color: rgba(0, 0, 0, 0);width:24px;height: 24px;box-shadow: none;}
-<!-- css_end -->
+.menu-a{
+	float:left;
+	/*display:inline-block;*/
+	width:50%;
+	background:#fff;
+	color:#000;
+	text-align:center;
+	line-height:30px;
+	border-bottom:#ccc solid 4px;
+	/*text-shadow:0px 0px 3px #f1da36;*/
+}
+.menu-a.sel{
+	border-bottom:#ff2424 solid 4px;
+}
+#nav {
+      width: 100%;
+      float: left;
+      margin: 0 0 3em 0;
+      padding: 0;
+      list-style: none;
+      background-color: #f2f2f2;
+      border-bottom: 1px solid #ccc;
+      border-top: 1px solid #ccc; }
+   #nav li {
+      float: left; width:50%;
+      }
+   #nav li a {
+      display: block;
+      padding: 4px 8px;
+      text-align:center;
+      text-decoration: none;
+      font-weight: bold;
+      color: #069;
+      border-right: 1px solid #ccc;
+       white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+      }
+   #nav li a:hover {
+      color: #c00;
+      background-color: #fff; }
+   #nav li a:active {
+   	  color:#fff;
+   	  background:#e00;
+   }
+   #nav li a.sel {
+   	color:#fff;
+   	  background:#e00;
+   }
+.gallery { list-style: none; padding: 0; margin: 0; overflow-y:hidden;}
+.gallery:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+.gallery li { float: left; width: 33.33333333%; }
+.gallery li a { display: block; margin: 5px; border: 1px solid #3c3c3c; }
+.gallery li img { display: block; width: 100%; height: auto; }
 </style>
+<script>
+RMC.init(function(){
+	var sw=(RMC._SW-60);
+	var sh=RMC._SH-80;
+	$('#main_menu_bar').css({'width':sw+'px','overflow':'auto'});
+	var num=$('#main_menu li').length;
+	sw=sw/4;
+	if(sw<50) sw=50;
+	$('#main_menu li').css('width',sw+'px');
+	num=num*(sw+1);
+	$('#main_menu').css('width',num+'px');
+	if(sw<=50){
+		sh=50;
+	}
+	if(sw<=100 && sw>50){
+		sh=65;
+	}
+	if(sw>100){
+		sh=80;
+	}
+	$('#main_menu img').css('width',sh+'px');
+	sh +=10;
+	$('.main_menu').css('height',sh+'px');
+	sh=sh/2-15;
+	$('#left_arrow').css('top',sh+'px');
+	$('#right_arrow').css('top',sh+'px');
+	
+	//設定影片高度
+	var ww=RMC._SW;
+	ww=parseInt(ww/4*3);
+	$('#youtube_player').attr('height',ww);
+	
+	RMC.add_evnet('hide','youtube','close_youtube');
+	RMC.add_evnet('show','youtube','set_youtube');
+	
+	RMC.on('v1','swipe',function(event, direction, distance, duration, fingerCount){
+		if(direction=='left'){
+			RMC.changepage('v2');
+		}
+	});
+	RMC.on('v2','swipe',function(event, direction, distance, duration, fingerCount){
+		if(direction=='left'){
+			RMC.changepage('v3');
+		}
+		if(direction=='right'){
+			RMC.backpage();
+		}
+	});
+	RMC.on('v3','swipe',function(event, direction, distance, duration, fingerCount){
+		if(direction=='left'){
+			RMC.changepage('main');
+		}
+		if(direction=='right'){
+			RMC.backpage();
+		}
+	});
+	
+	//設定相片大小
+	var w=RMC._SW;
+	var h=w;
+	if(w<200){
+        $('.gallery li').css('width','100%');
+        
+    }
+    if(w>200 && w<=400){
+        $('.gallery li').css('width','50%');
+        h *=0.5;
+    }
+    if(w>400 && w<=600){
+        $('.gallery li').css('width','33.33333%');
+        h *=0.33333;
+    }
+    if(w>600 && w<=800){
+        $('.gallery li').css('width','25%');
+        h *=0.25;
+    }
+    if(w>800){
+        $('.gallery li').css('width','20%');
+        h *=0.20;
+    }
+    $('.gallery li img').css('height',h+'px');
+    
+    //設定音樂
+    //load_media();
+});
+function close_youtube()
+{
+	$('#youtube_player').attr('src','');
+}
+function set_youtube()
+{
+	var attr=$('.listview-youtube .imgto:first').attr('re');	
+	chyoutube(attr);
+}
+function chyoutube(attr)
+{
+	$('#youtube_player').attr('src','http://www.youtube.com/embed/'+attr+'?autoplay=1');
+	$('#youtube .content').scrollTop(0);
+}
+$(document).ready(function(){
+	//RMC.add_evnet('show','youtube','initqq');
+});
+function initqq()
+{
+	//alert('youtube');
+	//var cc=$('#youtube').find('.content');	
+	//alert(cc.outerHeight(true));
+	
+	//cc.attr("class","content bbgg2");
+	///alert(RMC._SH);
+
+	//var ch=cc.outerHeight(true);
+	//ch -=100;
+	//cc.css({'height':ch+'px','overflow':''});
+}
+function about_us(id)
+{
+	$('#nav .sel').removeClass('sel');
+	$('#d'+id).addClass('sel');
+	if(id=='av2'){
+		$('#av1').css('display','none');
+		$('#av2').css('display','');
+		//$('#av2').fadeIn();
+	}else{
+		$('#av2').css('display','none');
+		$('#av1').css('display','');
+	}
+	/*$('#about_us .menu-a').attr('class','menu-a');
+	$('#d'+id).addClass('sel');
+	if(id=='av2'){
+		$('#av1').css('display','none');
+		$('#av2').css('display','');
+		//$('#av2').fadeIn();
+	}else{
+		$('#av2').css('display','none');
+		$('#av1').css('display','');
+	}*/
+}
+function to_ablank(url)
+{
+	$('#afarme').attr('src',url);
+	RMC.changepage('ablank');
+}
+function inbrow(url)
+{
+	var ref = window.open(url, '_blank', 'location=no');
+    ref.addEventListener('loadstart', function() {  });
+    ref.addEventListener('loadstop', function() {  });
+    ref.addEventListener('exit', function() {  });
+}
+(function(window, PhotoSwipe){
+    
+    document.addEventListener('DOMContentLoaded', function(){
+    
+        var
+            options = {},
+            instance = PhotoSwipe.attach( window.document.querySelectorAll('#Gallery a'), options );
+    
+    }, false);
+    
+    
+}(window, window.Code.PhotoSwipe));
+function getCordovaPath(){
+    var path = window.location.pathname;
+    var phoneGapPath = path.substring(0, path.lastIndexOf('/') + 1);
+    return phoneGapPath;
+}
+function load_media()
+{
+	if(RMC._CORDOVA_STATUS){
+		//alert('vvv');
+		var path = window.location.pathname;
+	    path = path.substr( path, path.length - 10 );
+	    //alert(path);
+		 playAudio(getCordovaPath()+"audio/badgirl.mp3");
+	}else{
+		setTimeout('load_media()',200);
+	}	
+}
+RMC.add_evnet('show','main','paly_media');
+RMC.add_evnet('hidebefore','main','play_pause');
+function paly_media()
+{//alert('play_emdia');
+	if(RMC._CORDOVA_STATUS){
+		//alert('starts');
+		if(!playone){
+			var path = window.location.pathname;
+	    	path = path.substr( path, path.length - 10 );
+	    	playAudio(getCordovaPath()+"audio/badgirl.mp3");
+	    	//playAudio("file://"+path+"audio/badgirl.mp3");
+	    	playone=true;
+	    	playing=true;
+		}else{
+			//pauseAudio
+			if(playing){
+			 my_media.play();
+			}
+		}
+	}
+}
+function play_pause()
+{
+	if(playing) pauseAudio();
+}
+var my_media = null;
+var mediaTimer = null;
+var playone=false;//第一次載入過
+var playing=false;//是否有播放過，沒有按過停止
+var total_sec=0;
+//Play audio
+//
+function playAudio(src) {
+    // Create Media object from src
+    my_media = new Media(src, onSuccess, onError,onstatus);
+
+    // Play audio
+    my_media.play();
+    // Update my_media position every second
+    if (mediaTimer == null) {
+        mediaTimer = setInterval(function() {
+            // get my_media position
+            my_media.getCurrentPosition(
+                // success callback
+                function(position) {
+                    if (position > -1) {
+                        setAudioPosition(position);
+                    }
+                },
+                // error callback
+                function(e) {
+                    console.log("Error getting pos=" + e);
+                    setAudioPosition("Error: " + e);
+                }
+            );
+        }, 1000);
+    }
+    
+    setTimeout(function(){
+    	total_sec=my_media.getDuration();
+    	if(total_sec>0){
+    		total_sec=Math.ceil(total_sec);
+    	}
+    },2000);
+}
+
+// Pause audio
+//
+function pauseAudio() {
+    if (my_media) {
+        my_media.pause();
+    }
+}
+
+// Stop audio
+//
+function stopAudio() {
+    if (my_media) {
+        my_media.stop();
+    }
+    clearInterval(mediaTimer);
+    mediaTimer = null;
+}
+
+// onSuccess Callback
+//
+function onSuccess() {
+    console.log("playAudio():Audio Success");
+}
+
+// onError Callback
+//
+function onError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
+
+function onstatus(e)
+{
+	//alert(e);	
+	if(e==4){
+		my_media.seekTo(0);
+		paly_media();
+	}
+}
+
+// Set audio position
+//
+function setAudioPosition(position) {
+    //alert(position);//
+    //document.getElementById('sec').innerHTML = position;
+    //total_sec
+    if(total_sec>0 && position>0){
+    	var per=(Math.ceil(position)/total_sec);
+    	var w=Math.round(RMC._SW*per);
+    	$('#sec').css('width',w+'px');
+    	//document.getElementById('sec').innerHTML='------------------- '+total_sec+' --- '+position+' --- '+per+' --- '+w;
+    }else $('#sec').css('width','0px');
+}
+function set_media()
+{
+	//alert(e.target.innerHTML);
+	if(playone){
+		if(playing){
+			$('#pbtn').attr('src','images/play.png');
+			playing=false;
+			stopAudio();
+		}else{
+			$('#pbtn').attr('src','images/stop.png');
+			playing=true;
+			paly_media();
+			if (mediaTimer == null) {
+		        mediaTimer = setInterval(function() {
+		            // get my_media position
+		            my_media.getCurrentPosition(
+		                // success callback
+		                function(position) {
+		                    if (position > -1) {
+		                        setAudioPosition(position);
+		                    }
+		                },
+		                // error callback
+		                function(e) {
+		                    console.log("Error getting pos=" + e);
+		                    setAudioPosition("Error: " + e);
+		                }
+		            );
+		        }, 1000);
+		    }
+		}
+	}
+}
+</script>
 </head>
-<body><!-- main_start --><!-- main_end -->
-<div data-role="page" id="page1" >
-	<div  data-role="header" style="color:#fff;background:transparent;border:#fff solid 0px;">
-        <h3 style="text-align:center;padding:0px;color:#fff;margin:.6em;">
-           SUPER 7 - 妞妞<script>localStorage["appname"]="SUPER 7 - 妞妞";</script>
-        </h3>
-        <!-- pushmsg_start --><span id="pushmsga" class="chat"><span class="ui-btn-corner-all msgtipb" id="pushmsgcount">5</span></span><!-- pushmsg_end -->
-    </div>
-    <div  data-role="content" id="ctv" class="ctv">
-    <div style="text-align:center;"><!-- logo_start --><img src="images/logo.png" width="60%"/><!-- logo_end --></div>
-<!-- item_start --><!-- item_end -->		
-    	<div style="clear:both;"></div>
-    </div>
-<!-- bitem_start --><div data-theme="b" data-role="footer" data-position="fixed"><div data-role="navbar"><ul><!-- about_us_menustart --><li><a href="main.html" data-iconpos="top" data-icon="about_us" rel="external"><span id="about_us_title">關於妞妞</span></a></li><!-- about_us_menuend --><!-- gallery_menustart --><li><a href="gallery.html" data-iconpos="top" data-icon="gallery" rel="external"><span id="gallery_title">精選相片</span></a></li><!-- gallery_menuend --><!-- video_menustart --><li><a href="video.html" data-iconpos="top" data-icon="video" rel="external"><span id="video_title">精選影音</span></a></li><!-- video_menuend --><!-- contact_us_menustart --><li><a href="contact_us.html" data-iconpos="top" data-icon="contact_us" rel="external"><span id="contact_us_title">妞妞臉書</span></a></li><!-- contact_us_menuend --><!-- alink_menustart --><li><a href="alink.html" data-iconpos="top" data-icon="alink" rel="external"><span id="alink_title">推薦連結</span></a></li><!-- alink_menuend --></ul></div></div><!-- bitem_end -->
+<body>
+<!-- div class="page" id="v1">
+<div class="content bg1" tap="RMC.changepage('v2');"></div>
 </div>
-<div data-role="page" id="pushmsg" >
-	<div data-theme="c" data-role="header">
-    <a data-role="button" href="#page1" data-icon="back"  data-iconpos="left"
-        class="ui-btn-left" data-transition="slide" data-direction="reverse">
-            返回
-        </a>
-        <h3>
-           訊息通知
-        </h3>
-    </div>
-    <div data-role="content" id="pushmsgcc" >
-    <ul data-role="listview" data-divider-theme="c" data-inset="false" id="pushmsgul">
-    </ul>
-    </div>
+<div class="page" id="v2">
+<div class="content bg2" tap="RMC.changepage('v3');"></div>
+</div-->
+<div class="page" id="v3">
+<div class="content bg3" tap="RMC.changepage('main');"></div>
 </div>
+<div class="page" id="main">
+<div class="content bbgg">
+<div class="main_menu">
+<div style="position:absolute;width:30px;left:0px;top:0px;" id="left_arrow"><img src="images/left_arrow.png" width="30" /></div>
+<div style="position:absolute;opacity:1;top:5px;left:30px;padding:0px;" id="main_menu_bar">
+<ul id="main_menu">
+<li><a href="javascript:RMC.changepage('about_us');"><img src="images/icon/about_us.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('gallery');"><img src="images/icon/gallery.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('youtube');"><img src="images/icon/video.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('contact_us');"><img src="images/icon/contact_us.png"  /></a></li>
+<li><a href="javascript:RMC.changepage('alink');"><img src="images/icon/alink.png" /></a></li>
+</ul>
+</div>
+<span style="position:absolute;width:30px;top:0px;right:0px;" id="right_arrow"><img src="images/right_arrow.png" width="30" /></span>
+</div>
+<span id="sec" style="position:absolute;width:0px;height:30px;left:0px;bottom:20px;background:rgba(171,100,242,0.8);display:inline-block;z-index:0;"></span>
+<div class="music_play"><span class="play_img" for="pbtn" tap="set_media(this)"><img src="images/stop.png" id="pbtn"  /></span><span class="play_bar">妞妞最新單曲:壞女孩</span></div>
+</div>
+</div>
+<div class="page" id="about_us">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>關於妞妞</div>
+<div class="content bbgg2">
+<ul id="nav">
+      <li><a id="dav1" href="javascript:about_us('av1');" class="sel">基本資料</a></li>
+      <li><a id="dav2" href="javascript:about_us('av2');">主要經歷</a></li>
+   </ul>
+<div id="av1">
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="width:100%">
+	<tbody>
+		<tr>
+			<td style="text-align:center"><img src="http://www.app4u.tw/upload/file_folder/60/images/552416_368533523233536_1935895157_n-3.png"   style="opacity:0.9; width:302.22222900390625px" /></td>
+		</tr>
+	</tbody>
+</table>
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="width:70%">
+	<tbody>
+		<tr>
+			<td style="color:#fff;"><span style="font-size:18px"><span style="font-family:新細明體">生日：6月3日　　</span><br />
+			<span style="font-family:新細明體">星座：雙子座</span><br />
+			<span style="font-family:新細明體">身高：160ＣＭ　體重：45</span><br />
+			<span style="font-family:新細明體">三圍：34C、24、33</span><br />
+			<span style="font-family:新細明體">專長：舞蹈、演戲、主持、搞笑</span></span></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<div id="av2" style="display:none;color:#fff;">
+<p><span style="font-size:16px"><span style="font-family:新細明體">主要經歷：</span><span style="font-family:calibri"> </span></span></p>
+
+<p><span style="font-size:16px"><span style="font-family:新細明體">百戰大勝利　　辣妹正音班　專屬舞蹈團體<br />
+齊天大勝　　　台灣發燒星　嘻哈熱舞秀<br />
+包公管不管　　最佳夜店熱舞團體<br />
+榮獲</span><span style="font-family:calibri">95</span><span style="font-family:新細明體">年度金曲獎 台灣優質辣妹<br />
+惠來谷關溫泉 廣告代言人<br />
+優質ＳＰＡ 廣告代言人</span><br />
+<span style="font-family:calibri">PINKY DALL </span><span style="font-family:新細明體">彩妝 活動代言人<br />
+惠來谷關溫泉 廣告代言人<br />
+２００７台中新車大展～活動代言人<br />
+ＫＯＯＫＡＩ名錶 活動代言人<br />
+ＥＬＩＤＥ　精品ＣＦ廣告代言團體<br />
+２００８台中新車大展～活動代言人<br />
+海豚綜合台　專屬ＣＦ廣告代言團體<br />
+美眉逍遙遊　外景主持人<br />
+烏日啤酒觀光大街～觀光大使<br />
+２００９台中世貿電腦展～活動代言人<br />
+ＳＯＷＡ　手機促銷活動代言人<br />
+大同手機 代言人<br />
+遠傳門市開幕活動代言人<br />
+台哥大手機促銷活動代言人<br />
+<br />
+不可思議～大膽旅行團</span><span style="font-family:calibri">--</span><span style="font-family:新細明體">外景主持人<br />
+我猜</span><span style="font-family:calibri">! </span><span style="font-family:新細明體">我猜</span><span style="font-family:calibri">!</span><span style="font-family:新細明體">我猜猜</span><span style="font-family:calibri">!</span><span style="font-family:新細明體">、千萬大挑戰小天使<br />
+驚爆變色龍</span><span style="font-family:calibri">&mdash;</span><span style="font-family:新細明體">女主角、戲說台灣<br />
+見見康康、電視笑話冠軍、明至天皇<br />
+綜藝大羸家、麻辣天后宫、男生女生配、秦偉脫殼秀、綜藝大順利、双擘傳說<br />
+全民大悶鍋、愛的郵差、</span><span style="font-family:calibri">TV</span><span style="font-family:新細明體">搜查線、無敵發發發、社會追緝令、娛樂大網咖<br />
+生命的太陽宣傳主持人、世貿電腦資訊展主持人、中華電信專屬</span><span style="font-family:calibri">SHOW GIRL</span><br />
+<span style="font-family:calibri">達富國際旅遊代言人、蘋果日報鋼管塑身代言人、瑪格麗特專屬鋼管老師<br />
+獨家報導專訪、壹週刋專訪</span></span><span style="font-family:calibri; font-size:12pt"><br>2014里港最大場跨年主持人</span></p>
+</div>
+
+</div>
+</div>
+<!-- facebook-contact_us -->
+<div class="page" id="contact_us">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>妞妞臉書</div>
+<div class="content bbgg2">
+<div style="text-align:center;padding-top:50px;"><a href="javascript:inbrow('https://www.facebook.com/Super7Cherryfans');"><img src="img/pic.jpg" border="0" style="width:150px;height:150px;border-radius:75px;box-shadow:0px 0px 10px #f1da36;opacity:0.8;" /></a></div>
+<p style="text-align:center"><span style="font-size:18px"><a href="javascript:inbrow('https://www.facebook.com/Super7Cherryfans');" style="color:#fff;">妞妞臉書(請點擊)</a></span></p>
+</div>
+</div>
+<!-- facebook-contact_us -->
+<!-- alink -->
+<div class="page" id="alink">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>推薦連結</div>
+<div class="content bbgg2">
+<ul class="listview-alink">
+<li><a href="javascript:to_ablank('http://www.ak9k.com');"><span class="txtto">笑話集</span></a></li>
+<li><a href="javascript:to_ablank('http://ananedu.com/proverb/i2taiwandesk.htm');"><span class="txtto">台灣俚語</span></a></li>
+<li><a href="javascript:to_ablank('http://www.app4u.tw');"><span class="txtto">APP4U官網</span></a></li>
+<li><a href="javascript:inbrow('https://www.facebook.com/digitalplayers');" target="_blank"><span class="txtto">APP4U粉絲團</span></a></li>
+</ul>
+</div>
+</div>
+<!-- alink -->
+<div class="page" id="youtube">
+<div class="header header-bg" data-position="true"><span class="l-btn" tap="RMC.backpage();">返回</span>精選影片</div>
+<div class="content bbgg2">
+<div>
+<iframe width="100%" id="youtube_player" height="720" data-src="http://www.youtube.com/embed/xPZlkGjwiuM?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+<ul class="listview-youtube">
+<li tap="chyoutube('xPZlkGjwiuM');"><span class="imgto" re="xPZlkGjwiuM"><img src="images/video/22.jpg" class="l-img" />慾女地團</span></li>
+<li tap="chyoutube('54Pj-vsaLNU');"><span class="imgto" re="54Pj-vsaLNU"><img src="images/video/21.jpg" class="l-img" />Super7 - 做阮的伴</span></li>
+<li tap="chyoutube('LD3kiiuHvH4');"><span class="imgto" re="LD3kiiuHvH4"><img src="images/video/20.jpg" class="l-img" />Super7 - 誰是誰的愛人</span></li>
+<li tap="chyoutube('AISdWm-kBQk');"><span class="imgto" re="AISdWm-kBQk"><img src="images/video/19.jpg" class="l-img" />Super7 - 友情萬歲</span></li>
+<li tap="chyoutube('mpjwb9bC8MY');"><span class="imgto" re="mpjwb9bC8MY"><img src="images/video/18.jpg" class="l-img" />Super7 - 手放開</span></li>
+<li tap="chyoutube('kp4sMEJ5FUs');"><span class="imgto" re="kp4sMEJ5FUs"><img src="images/video/17.jpg" class="l-img" />Super7 - You are only one</span></li>
+<li tap="chyoutube('mBJ24KRtn7U');"><span class="imgto" re="mBJ24KRtn7U"><img src="images/video/16.jpg" class="l-img" />Super7 - 真命天子</span></li>
+<li tap="chyoutube('4EZnVXXZCHw');"><span class="imgto" re="4EZnVXXZCHw"><img src="images/video/15.jpg" class="l-img" />Super7 - 陪我7淘</span></li>
+<li tap="chyoutube('7b_2Uf7ERkc');"><span class="imgto" re="7b_2Uf7ERkc"><img src="images/video/14.jpg" class="l-img" />Super7 - 麥囉嗦</span></li>
+</ul>
+</div>
+</div>
+<!-- a blank -->
+<div class="page" id="ablank">
+<div class="content">
+<iframe width="100%" height="100%" frameborder="0" src="http://www.facebook.com/Super7Cherryfans" id="afarme"></iframe>
+</div>
+</div>
+<!-- gallery -->
+<div class="page" id="gallery">
+<div class="header header-bg"><span class="l-btn" tap="RMC.backpage();">返回</span>精選相片</div>
+<div class="content">
+<ul id="Gallery" class="gallery" ><li><a href="images/gallery/277.jpg" alt="妞妞"><img src="images/gallery/277.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/276.jpg" alt="妞妞"><img src="images/gallery/276.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/275.jpg" alt="妞妞"><img src="images/gallery/275.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/274.jpg" alt="妞妞"><img src="images/gallery/274.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/273.jpg" alt="妞妞"><img src="images/gallery/273.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/272.jpg" alt="妞妞"><img src="images/gallery/272.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/271.jpg" alt="妞妞"><img src="images/gallery/271.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/270.jpg" alt="妞妞"><img src="images/gallery/270.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/269.jpg" alt="妞妞"><img src="images/gallery/269.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/268.jpg" alt="妞妞"><img src="images/gallery/268.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/267.jpg" alt="妞妞"><img src="images/gallery/267.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/266.jpg" alt="妞妞"><img src="images/gallery/266.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/265.jpg" alt="妞妞"><img src="images/gallery/265.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/264.jpg" alt="妞妞"><img src="images/gallery/264.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/263.jpg" alt="妞妞"><img src="images/gallery/263.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/262.jpg" alt="妞妞"><img src="images/gallery/262.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/261.jpg" alt="妞妞"><img src="images/gallery/261.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/260.jpg" alt="妞妞"><img src="images/gallery/260.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/259.jpg" alt="妞妞"><img src="images/gallery/259.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/258.jpg" alt="妞妞"><img src="images/gallery/258.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/257.jpg" alt="妞妞"><img src="images/gallery/257.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/256.jpg" alt="妞妞"><img src="images/gallery/256.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/78.jpg" alt="妞妞"><img src="images/gallery/78.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/77.jpg" alt="妞妞"><img src="images/gallery/77.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/76.jpg" alt="妞妞"><img src="images/gallery/76.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/75.jpg" alt="妞妞"><img src="images/gallery/75.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/74.jpg" alt="妞妞"><img src="images/gallery/74.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/73.jpg" alt="妞妞"><img src="images/gallery/73.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/72.jpg" alt="妞妞"><img src="images/gallery/72.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/71.jpg" alt="妞妞"><img src="images/gallery/71.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/70.jpg" alt="妞妞"><img src="images/gallery/70.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/69.jpg" alt="妞妞"><img src="images/gallery/69.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/68.jpg" alt="妞妞"><img src="images/gallery/68.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/67.jpg" alt="妞妞"><img src="images/gallery/67.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/66.jpg" alt="妞妞"><img src="images/gallery/66.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/65.jpg" alt="妞妞"><img src="images/gallery/65.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/64.jpg" alt="妞妞"><img src="images/gallery/64.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/63.jpg" alt="妞妞"><img src="images/gallery/63.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/62.jpg" alt="妞妞"><img src="images/gallery/62.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/61.jpg" alt="妞妞"><img src="images/gallery/61.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/60.jpg" alt="妞妞"><img src="images/gallery/60.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/59.jpg" alt="妞妞"><img src="images/gallery/59.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/58.jpg" alt="妞妞"><img src="images/gallery/58.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/57.jpg" alt="妞妞"><img src="images/gallery/57.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/56.png" alt="妞妞"><img src="images/gallery/56.png" alt="妞妞" /></a></li><li><a href="images/gallery/55.jpg" alt="妞妞"><img src="images/gallery/55.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/54.jpg" alt="妞妞"><img src="images/gallery/54.jpg" alt="妞妞" /></a></li><li><a href="images/gallery/53.jpg" alt="妞妞"><img src="images/gallery/53.jpg" alt="妞妞" /></a></li></ul>
+<div style="clear:both;">&nbsp;</div>
+</div>
+</div>
+<!-- gallery -->
 </body>
 </html>
